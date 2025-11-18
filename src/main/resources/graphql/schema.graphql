@@ -1,0 +1,67 @@
+# Define the Author type
+type Author {
+    id: ID!
+    name: String!
+    email: String!
+    books: [Book!]!  # Nested field - will be resolved by controller
+}
+
+# Define the Book type
+type Book {
+    id: ID!
+    title: String!
+    isbn: String!
+    publishedYear: Int!
+    author: Author!     # Nested field
+    reviews: [Review!]! # Nested field
+}
+
+# Define the Review type
+type Review {
+    id: ID!
+    reviewerName: String!
+    rating: Int!
+    comment: String
+}
+
+# Query operations (READ)
+type Query {
+    # Get all books
+    allBooks: [Book!]!
+
+    # Get book by ID
+    bookById(id: ID!): Book
+
+    # Get all authors
+    allAuthors: [Author!]!
+
+    # Get author by ID
+    authorById(id: ID!): Author
+
+    # Get books by author ID
+    booksByAuthor(authorId: ID!): [Book!]!
+}
+
+# Input types for mutations
+input CreateBookInput {
+    title: String!
+    isbn: String!
+    publishedYear: Int!
+    authorId: ID!
+}
+
+input CreateReviewInput {
+    bookId: ID!
+    reviewerName: String!
+    rating: Int!
+    comment: String
+}
+
+# Mutation operations (CREATE, UPDATE, DELETE)
+type Mutation {
+    # Create a new book
+    createBook(input: CreateBookInput!): Book!
+
+    # Add a review to a book
+    addReview(input: CreateReviewInput!): Review!
+}
